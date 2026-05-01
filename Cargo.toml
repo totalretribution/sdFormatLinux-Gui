@@ -1,0 +1,23 @@
+[package]
+name = "sdformatlinux-gui"
+version = "0.1.0"
+edition = "2024"
+description = "GUI front-end for sdFormatLinux — formats SD cards as FAT32"
+license = "MIT"
+
+[package.metadata.deb]
+depends = "$auto"
+section = "utils"
+assets = [
+    ["target/release/sdformatlinux-gui", "usr/bin/sdformatlinux-gui", "755"],
+]
+
+[package.metadata.generate-rpm]
+assets = [
+    { source = "target/release/sdformatlinux-gui", dest = "/usr/bin/sdformatlinux-gui", mode = "755" },
+]
+
+[dependencies]
+eframe = "0.34.1"
+egui = "0.34.1"
+which = "8.0.2"
