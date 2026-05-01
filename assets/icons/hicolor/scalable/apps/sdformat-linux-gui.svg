@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a525a"></stop>
+      <stop offset="1" stop-color="#2a2f34"></stop>
+    </linearGradient>
+    <linearGradient id="bodyEdge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a636b"></stop>
+      <stop offset="1" stop-color="#1f2327"></stop>
+    </linearGradient>
+    <linearGradient id="label" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcfcfc"></stop>
+      <stop offset="1" stop-color="#d4d8db"></stop>
+    </linearGradient>
+    <linearGradient id="arrow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5cc1ee"></stop>
+      <stop offset="1" stop-color="#1d80b8"></stop>
+    </linearGradient>
+    <linearGradient id="arrowEdge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7ad0f2"></stop>
+      <stop offset="1" stop-color="#176896"></stop>
+    </linearGradient>
+    <radialGradient id="arrowSheen" cx=".35" cy=".25" r=".8">
+      <stop offset="0" stop-color="#fff" stop-opacity=".35"></stop>
+      <stop offset=".6" stop-color="#fff" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+
+  
+  <path d="M11 4 h20 l6 6 v32 a2 2 0 0 1 -2 2 H11 a2 2 0 0 1 -2 -2 V6 a2 2 0 0 1 2 -2 z" fill="url(#bodyEdge)"></path>
+  <path d="M11 5 h19.6 l5.4 5.4 V42 a1 1 0 0 1 -1 1 H11 a1 1 0 0 1 -1 -1 V6 a1 1 0 0 1 1 -1 z" fill="url(#body)"></path>
+
+  
+  <path d="M10 43 h26 a1 1 0 0 1 -1 1 H11 a1 1 0 0 1 -1 -1 z" fill="#000" fill-opacity=".22"></path>
+
+  
+  <rect x="12" y="9" width="24" height="14" rx="1" fill="url(#label)"></rect>
+  <rect x="12" y="9" width="24" height="1" fill="#000" fill-opacity=".08"></rect>
+
+  
+  <g fill="#b7bcc0">
+    <rect x="13" y="25" width="2" height="5" rx=".4"></rect>
+    <rect x="16" y="25" width="2" height="5" rx=".4"></rect>
+    <rect x="19" y="25" width="2" height="5" rx=".4"></rect>
+    <rect x="22" y="25" width="2" height="5" rx=".4"></rect>
+    <rect x="25" y="25" width="2" height="5" rx=".4"></rect>
+    <rect x="28" y="25" width="2" height="5" rx=".4"></rect>
+    <rect x="31" y="25" width="2" height="5" rx=".4"></rect>
+    <rect x="34" y="25" width="2" height="5" rx=".4"></rect>
+  </g>
+
+  
+  <g transform="translate(23 23)">
+    <ellipse cx="12" cy="22.5" rx="11" ry="1.5" fill="#000" fill-opacity=".18"></ellipse>
+  </g>
+
+  
+  <g transform="translate(23 23)">
+    
+    <circle cx="11" cy="11.6" r="10.4" fill="#000" fill-opacity=".22"></circle>
+    
+    <circle cx="11" cy="11" r="10.4" fill="url(#arrowEdge)"></circle>
+    
+    <circle cx="11" cy="11" r="9.4" fill="url(#arrow)"></circle>
+    
+    <circle cx="11" cy="11" r="9.4" fill="url(#arrowSheen)"></circle>
+    
+    
+    <path d="&#xA;      M 11 4.4&#xA;      A 6.6 6.6 0 1 1 4.6 13.6&#xA;      L 6.5 12.7&#xA;      A 4.6 4.6 0 1 0 11 6.4&#xA;      L 11 9.0&#xA;      L 7.4 5.4&#xA;      L 11 1.8&#xA;      Z" fill="#fff"></path>
+  </g>
+</svg>

@@ -3,6 +3,14 @@ use std::io::{BufRead, BufReader, Write};
 use std::process::{Command, Stdio};
 use std::sync::mpsc;
 
+const ICON_PNG: &[u8] = include_bytes!("../assets/icons/hicolor/256x256/apps/sdformat-linux-gui.png");
+
+fn load_icon() -> egui::IconData {
+    let img = image::load_from_memory(ICON_PNG).unwrap().into_rgba8();
+    let (w, h) = image::GenericImageView::dimensions(&img);
+    egui::IconData { rgba: img.into_raw(), width: w, height: h }
+}
+
 const TERMINAL_BG: egui::Color32 = egui::Color32::from_rgb(13, 17, 23);
 const TERMINAL_FG: egui::Color32 = egui::Color32::from_rgb(171, 225, 171);
 const BTN_GREEN: egui::Color32 = egui::Color32::from_rgb(35, 134, 54);
@@ -355,7 +363,8 @@ fn main() {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_title("sdFormatLinux-Gui")
-            .with_inner_size([540.0, 560.0]),
+            .with_inner_size([540.0, 560.0])
+            .with_icon(load_icon()),
         ..Default::default()
     };
 

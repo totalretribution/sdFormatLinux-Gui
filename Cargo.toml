@@ -10,14 +10,37 @@ depends = "$auto"
 section = "utils"
 assets = [
     ["target/release/sdformatlinux-gui", "usr/bin/sdformatlinux-gui", "755"],
+    ["assets/sdformat-linux-gui.desktop", "usr/share/applications/sdformat-linux-gui.desktop", "644"],
+    ["assets/icons/hicolor/16x16/apps/sdformat-linux-gui.png", "usr/share/icons/hicolor/16x16/apps/sdformat-linux-gui.png", "644"],
+    ["assets/icons/hicolor/22x22/apps/sdformat-linux-gui.png", "usr/share/icons/hicolor/22x22/apps/sdformat-linux-gui.png", "644"],
+    ["assets/icons/hicolor/24x24/apps/sdformat-linux-gui.png", "usr/share/icons/hicolor/24x24/apps/sdformat-linux-gui.png", "644"],
+    ["assets/icons/hicolor/32x32/apps/sdformat-linux-gui.png", "usr/share/icons/hicolor/32x32/apps/sdformat-linux-gui.png", "644"],
+    ["assets/icons/hicolor/48x48/apps/sdformat-linux-gui.png", "usr/share/icons/hicolor/48x48/apps/sdformat-linux-gui.png", "644"],
+    ["assets/icons/hicolor/64x64/apps/sdformat-linux-gui.png", "usr/share/icons/hicolor/64x64/apps/sdformat-linux-gui.png", "644"],
+    ["assets/icons/hicolor/128x128/apps/sdformat-linux-gui.png", "usr/share/icons/hicolor/128x128/apps/sdformat-linux-gui.png", "644"],
+    ["assets/icons/hicolor/256x256/apps/sdformat-linux-gui.png", "usr/share/icons/hicolor/256x256/apps/sdformat-linux-gui.png", "644"],
+    ["assets/icons/hicolor/512x512/apps/sdformat-linux-gui.png", "usr/share/icons/hicolor/512x512/apps/sdformat-linux-gui.png", "644"],
+    ["assets/icons/hicolor/scalable/apps/sdformat-linux-gui.svg", "usr/share/icons/hicolor/scalable/apps/sdformat-linux-gui.svg", "644"],
 ]
 
 [package.metadata.generate-rpm]
 assets = [
     { source = "target/release/sdformatlinux-gui", dest = "/usr/bin/sdformatlinux-gui", mode = "755" },
+    { source = "assets/sdformat-linux-gui.desktop", dest = "/usr/share/applications/sdformat-linux-gui.desktop", mode = "644" },
+    { source = "assets/icons/hicolor/16x16/apps/sdformat-linux-gui.png", dest = "/usr/share/icons/hicolor/16x16/apps/sdformat-linux-gui.png", mode = "644" },
+    { source = "assets/icons/hicolor/22x22/apps/sdformat-linux-gui.png", dest = "/usr/share/icons/hicolor/22x22/apps/sdformat-linux-gui.png", mode = "644" },
+    { source = "assets/icons/hicolor/24x24/apps/sdformat-linux-gui.png", dest = "/usr/share/icons/hicolor/24x24/apps/sdformat-linux-gui.png", mode = "644" },
+    { source = "assets/icons/hicolor/32x32/apps/sdformat-linux-gui.png", dest = "/usr/share/icons/hicolor/32x32/apps/sdformat-linux-gui.png", mode = "644" },
+    { source = "assets/icons/hicolor/48x48/apps/sdformat-linux-gui.png", dest = "/usr/share/icons/hicolor/48x48/apps/sdformat-linux-gui.png", mode = "644" },
+    { source = "assets/icons/hicolor/64x64/apps/sdformat-linux-gui.png", dest = "/usr/share/icons/hicolor/64x64/apps/sdformat-linux-gui.png", mode = "644" },
+    { source = "assets/icons/hicolor/128x128/apps/sdformat-linux-gui.png", dest = "/usr/share/icons/hicolor/128x128/apps/sdformat-linux-gui.png", mode = "644" },
+    { source = "assets/icons/hicolor/256x256/apps/sdformat-linux-gui.png", dest = "/usr/share/icons/hicolor/256x256/apps/sdformat-linux-gui.png", mode = "644" },
+    { source = "assets/icons/hicolor/512x512/apps/sdformat-linux-gui.png", dest = "/usr/share/icons/hicolor/512x512/apps/sdformat-linux-gui.png", mode = "644" },
+    { source = "assets/icons/hicolor/scalable/apps/sdformat-linux-gui.svg", dest = "/usr/share/icons/hicolor/scalable/apps/sdformat-linux-gui.svg", mode = "644" },
 ]
 
 [dependencies]
 eframe = "0.34.1"
 egui = "0.34.1"
+image = { version = "0.25", default-features = false, features = ["png"] }
 which = "8.0.2"

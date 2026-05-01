@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=SD Format
+GenericName=SD Card Formatter
+Comment=Format SD cards
+Exec=sdformatlinux-gui
+Icon=sdformat-linux-gui
+Terminal=false
+Categories=System;Utility;HardwareSettings;
+Keywords=SD;card;format;flash;disk;storage;
+StartupNotify=true
