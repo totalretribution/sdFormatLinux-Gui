@@ -25,7 +25,7 @@ const EXIT_MARKER: &str = "__SDFORMAT_EXIT_";
 const SHELL_DIED: &str = "__SDFORMAT_SHELL_DIED__";
 
 struct RootShell {
-    stdin: std::process::ChildStdin,
+    stdin: Option<std::process::ChildStdin>,
     child: std::process::Child,
 }
 
@@ -58,19 +58,34 @@ impl RootShell {
                 .for_each(|l| { tx.send(l.unwrap_or_default()).ok(); });
         });
 
-        Ok(RootShell { stdin, child })
+        Ok(RootShell { stdin: Some(stdin), child })
     }
 
     fn run(&mut self, cmd: &str) -> std::io::Result<()> {
-        writeln!(self.stdin, "{cmd}; echo \"{EXIT_MARKER}$?__\"")?;
-        self.stdin.flush()
+        let stdin = self.stdin.as_mut()
+            .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::BrokenPipe, "stdin closed"))?;
+        writeln!(stdin, "{cmd}; echo \"{EXIT_MARKER}$?__\"")?;
+        stdin.flush()
     }
 }
 
 impl Drop for RootShell {
     fn drop(&mut self) {
-        let _ = self.child.kill();
-        let _ = self.child.wait();
+        // pkexec child runs as root — kill() fails with EPERM. Close stdin
+        // to send EOF; bash exits cleanly. Poll try_wait with short timeout
+        // so close-on-quit never blocks the UI thread.
+        if let Some(mut stdin) = self.stdin.take() {
+            let _ = writeln!(stdin, "exit");
+        }
+        let deadline = std::time::Instant::now() + std::time::Duration::from_millis(500);
+        loop {
+            match self.child.try_wait() {
+                Ok(Some(_)) => return,
+                Ok(None) if std::time::Instant::now() >= deadline => return,
+                Ok(None) => std::thread::sleep(std::time::Duration::from_millis(20)),
+                Err(_) => return,
+            }
+        }
     }
 }
 
