@@ -1,3 +1,5 @@
+mod update;
+
 use eframe::egui;
 use std::io::{BufRead, BufReader, Write};
 use std::process::{Command, Stdio};
@@ -18,6 +20,9 @@ const BTN_MUTED: egui::Color32 = egui::Color32::from_rgb(40, 44, 52);
 const BORDER: egui::Color32 = egui::Color32::from_rgb(48, 54, 61);
 const LABEL_COL_W: f32 = 52.0;
 const REFRESH_BTN_W: f32 = 34.0;
+
+// Private copy shipped in the .deb/.rpm; source builds fall back to $PATH.
+const BUNDLED_FORMATTER: &str = "/usr/libexec/sdformatlinux-gui/sdFormatLinux";
 
 // Sentinel echoed by bash after each command; never appears in normal output.
 const EXIT_MARKER: &str = "__SDFORMAT_EXIT_";
@@ -97,10 +102,12 @@ struct App {
     running: bool,
     shell: Option<RootShell>,
     rx: Option<mpsc::Receiver<String>>,
+    update_check: Option<mpsc::Receiver<String>>,
+    new_version: Option<String>,
 }
 
 impl App {
-    fn new() -> Self {
+    fn new(ctx: &egui::Context) -> Self {
         App {
             devices: list_devices(),
             selected: 0,
@@ -109,6 +116,22 @@ impl App {
             running: false,
             shell: None,
             rx: None,
+            update_check: update::spawn(ctx),
+            new_version: None,
+        }
+    }
+
+    fn poll_update(&mut self) {
+        let Some(rx) = &self.update_check else {
+            return;
+        };
+        match rx.try_recv() {
+            Ok(v) => {
+                self.new_version = Some(v);
+                self.update_check = None;
+            }
+            Err(mpsc::TryRecvError::Disconnected) => self.update_check = None,
+            Err(mpsc::TryRecvError::Empty) => {}
         }
     }
 
@@ -126,11 +149,16 @@ impl App {
             return;
         }
 
-        let binary = match which::which("sdFormatLinux") {
-            Ok(p) => p,
-            Err(_) => {
-                self.log.push_str("ERROR: sdFormatLinux not found in PATH\n");
-                return;
+        let bundled = std::path::PathBuf::from(BUNDLED_FORMATTER);
+        let binary = if bundled.is_file() {
+            bundled
+        } else {
+            match which::which("sdFormatLinux") {
+                Ok(p) => p,
+                Err(_) => {
+                    self.log.push_str("ERROR: sdFormatLinux not found (bundled or in PATH)\n");
+                    return;
+                }
             }
         };
 
@@ -245,6 +273,7 @@ impl eframe::App for App {
         if self.running {
             ui.ctx().request_repaint();
         }
+        self.poll_update();
 
         // Format button anchored to bottom
         egui::TopBottomPanel::bottom("btn_panel")
@@ -284,11 +313,28 @@ impl eframe::App for App {
                         .color(egui::Color32::from_rgb(230, 237, 243)),
                 );
                 ui.add_space(3.0);
-                ui.label(
-                    egui::RichText::new("Forces FAT32 via sdFormatLinux")
-                        .size(12.0)
-                        .color(egui::Color32::from_rgb(110, 118, 129)),
-                );
+                ui.horizontal(|ui| {
+                    ui.label(
+                        egui::RichText::new("Forces FAT32 via sdFormatLinux")
+                            .size(12.0)
+                            .color(egui::Color32::from_rgb(110, 118, 129)),
+                    );
+                    // Hidden while formatting so a stray click can't open a browser mid-run.
+                    if let (Some(v), false) = (&self.new_version, self.running) {
+                        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                            ui.hyperlink_to(
+                                egui::RichText::new(format!("{v} available"))
+                                    .size(12.0)
+                                    .color(BTN_GREEN),
+                                update::RELEASES_URL,
+                            )
+                            .on_hover_text(format!(
+                                "You have v{}. Opens the release page.",
+                                env!("CARGO_PKG_VERSION")
+                            ));
+                        });
+                    }
+                });
                 ui.add_space(14.0);
 
                 let label_color = egui::Color32::from_rgb(201, 209, 217);
@@ -388,7 +434,7 @@ fn main() {
         options,
         Box::new(|cc| {
             setup_style(&cc.egui_ctx);
-            Ok(Box::new(App::new()))
+            Ok(Box::new(App::new(&cc.egui_ctx)))
         }),
     )
     .unwrap();
