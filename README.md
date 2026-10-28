@@ -4,8 +4,9 @@ A minimal Linux GUI for [sdFormatLinux](https://github.com/profi200/sdFormatLinu
 
 ## Features
 
-- Lists block devices (no partitions, no loop devices)
-- Optional volume label
+- Lists disks with path, model, bus and size; the disk your system runs from is shown but can't be picked
+- Asks you to confirm before erasing, naming the drive and its size
+- Optional volume label (up to 11 characters, uppercased)
 - Streams formatter output in real time
 - Authenticates via `pkexec` once per session — root shell is reused for subsequent formats
 - Always passes `-f` (force FAT32)
@@ -53,7 +54,7 @@ The `.deb` and `.rpm` packages include [sdFormatLinux](https://github.com/profi2
 
 1. Select device from the dropdown (refresh with ↺)
 2. Optionally enter a volume label
-3. Click **Format SD Card** — pkexec prompts for your password once
-4. Output streams into the log area; button re-enables when done
+3. Click **Format /dev/… · size**, then **Erase and format** to confirm (Esc cancels) — pkexec prompts for your password once
+4. Output streams into the log area; a banner shows whether it worked
 
 Subsequent formats in the same session reuse the root shell — no further password prompts.
