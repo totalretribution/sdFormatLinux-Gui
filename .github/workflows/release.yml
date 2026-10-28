@@ -55,6 +55,18 @@ jobs:
       - name: Build release binary
         run: cargo build --release
 
+      # Pinned to the upstream v0.2.0 tag commit. Bundled into the packages
+      # together with its MIT licence (see Cargo.toml assets).
+      - name: Check out sdFormatLinux
+        uses: actions/checkout@v4
+        with:
+          repository: profi200/sdFormatLinux
+          ref: feac883e9826e994826f55097b83fe556674a7fe
+          path: third_party/sdFormatLinux
+
+      - name: Build sdFormatLinux
+        run: make -C third_party/sdFormatLinux release
+
       - name: Build DEB package
         run: cargo deb --no-build
 

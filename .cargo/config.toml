@@ -1,0 +1,5 @@
+# Dependency cooldown: when resolving, skip crates.io versions published less
+# than a week ago. Stable from Rust 1.100; older cargo ignores it.
+# Urgent fix: CARGO_RESOLVER_INCOMPATIBLE_PUBLISH_AGE=allow cargo update -p <crate>
+[registry]
+global-min-publish-age = "7 days"

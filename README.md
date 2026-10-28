@@ -9,10 +9,11 @@ A minimal Linux GUI for [sdFormatLinux](https://github.com/profi200/sdFormatLinu
 - Streams formatter output in real time
 - Authenticates via `pkexec` once per session — root shell is reused for subsequent formats
 - Always passes `-f` (force FAT32)
+- Checks GitHub releases for a newer version at most once a day and shows a link when one is out (never updates itself). Set `SDFORMAT_GUI_NO_UPDATE_CHECK=1` to turn this off
 
 ## Requirements
 
-- [`sdFormatLinux`](https://github.com/profi200/sdFormatLinux) in `$PATH`
+- [`sdFormatLinux`](https://github.com/profi200/sdFormatLinux) — bundled privately in the `.deb`/`.rpm`; source builds need it in `$PATH`
 - `pkexec` (polkit)
 - X11 or Wayland
 
@@ -38,6 +39,15 @@ sudo apt-get install libgl-dev libx11-dev libxcb1-dev libxcb-render0-dev \
 cargo build --release
 ./target/release/sdformatlinux-gui
 ```
+
+Source builds do not include `sdFormatLinux` — build it from the [upstream repo](https://github.com/profi200/sdFormatLinux) (`make release`) and put it in your `$PATH`.
+
+## Third-party software
+
+The `.deb` and `.rpm` packages include [sdFormatLinux](https://github.com/profi200/sdFormatLinux) v0.2.0, built from source at the upstream release commit and installed privately at `/usr/libexec/sdformatlinux-gui/sdFormatLinux` (not on `$PATH`). The app uses this copy when present and falls back to `sdFormatLinux` in `$PATH` otherwise. sdFormatLinux is Copyright (c) 2023 profi200 and distributed under the MIT License. Its licence text is installed at:
+
+- `/usr/share/doc/sdformatlinux-gui/sdFormatLinux-LICENSE.txt` (Debian / Ubuntu)
+- `/usr/share/licenses/sdformatlinux-gui/sdFormatLinux-LICENSE.txt` (Fedora / RHEL)
 
 ## Usage
 
